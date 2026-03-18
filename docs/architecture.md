@@ -12,6 +12,32 @@ The architecture is organized around a small set of rules:
 - small runtime surface with predictable rendering behavior
 - local decisions that do not block future extension
 
+## Requirement analysis and system framing
+
+I broke the requirement into four concerns:
+
+- responsive UI
+- one complete behavioral flow
+- a replaceable data boundary
+- a structure that can extend without a rewrite
+
+## Scope selection and tradeoffs
+
+I selected the booking-request approval flow because it exercises multiple read models with one user action.
+
+One decision updates:
+
+- queue state
+- dashboard metrics
+- recent bookings
+- facility pressure
+
+Key tradeoffs:
+
+- mocked data was chosen over a real backend to keep the system simple and leave a clean path to switch data sources later
+- heavy client libraries were avoided because they add cost without improving the core architecture
+- feature-first boundaries were chosen over generic global layers to keep related logic together and reduce coupling
+
 ## Layering
 
 ```text
