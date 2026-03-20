@@ -15,12 +15,60 @@ Forestince Admin is a responsive operations platform for managing campus facilit
 
 ## Dependency direction
 
-```text
-page/component
-  -> feature service
-    -> repository contract
-      -> repository implementation
-        -> store or remote data source
+```mermaid
+flowchart TD
+    classDef presentation fill:#D6E8FF,stroke:#4A90E2,color:#0B2545,stroke-width:1.5px
+    classDef application fill:#FFF5CC,stroke:#E6B800,color:#4A3D00,stroke-width:1.5px
+    classDef boundary fill:#FFE1E1,stroke:#D9534F,color:#5A2020,stroke-width:1.5px
+    classDef infrastructure fill:#EDE7FF,stroke:#7A57D1,color:#322654,stroke-width:1.5px
+
+    subgraph P["Presentation"]
+        DP["Dashboard Page"]:::presentation
+        RP["Booking Requests Page"]:::presentation
+        FP["Facilities Page"]:::presentation
+        UI["Shared UI Components"]:::presentation
+    end
+
+    subgraph A["Application / Feature Services"]
+        DS["Dashboard Service"]:::application
+        RS["Booking Requests Service"]:::application
+        FS["Facilities Service"]:::application
+    end
+
+    subgraph B["Repository Boundary"]
+        DR["Dashboard Repository Contract"]:::boundary
+        RR["Booking Requests Repository Contract"]:::boundary
+        FR["Facilities Repository Contract"]:::boundary
+    end
+
+    subgraph I["Infrastructure"]
+        MDR["Mock Dashboard Repository"]:::infrastructure
+        MRR["Mock Booking Requests Repository"]:::infrastructure
+        MFR["Mock Facilities Repository"]:::infrastructure
+        STORE["Shared Mock Store"]:::infrastructure
+        LS["localStorage"]:::infrastructure
+    end
+
+    DP --> DS
+    RP --> RS
+    FP --> FS
+
+    UI --- DP
+    UI --- RP
+    UI --- FP
+
+    DS --> DR
+    RS --> RR
+    FS --> FR
+
+    DR -.implemented by.-> MDR
+    RR -.implemented by.-> MRR
+    FR -.implemented by.-> MFR
+
+    MDR --> STORE
+    MRR --> STORE
+    MFR --> STORE
+    STORE --> LS
 ```
 
 This direction keeps orchestration in the service layer, keeps data access behind repositories, and prevents presentation code from coupling itself to infrastructure details.
